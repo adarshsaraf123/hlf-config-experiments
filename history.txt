@@ -1,0 +1,37 @@
+export FABRIC_CFG_PATH=~/go/src/github.com/hyperledger/fabric/sampleconfig/
+peer channel fetch config -o 127.0.0.1:7050 -c mychannel config_block.pb 
+ls
+configtxlator proto_decode --input config_block.pb --type common.Block --output config_block.json 
+jq .data.data[0].payload.data.config config_block.json 
+jq .data.data[0].payload.data.config config_block.json > config_reduced.json
+jq $MAXBATCHSIZEPATH config_reduced.json 
+jq .data.data[0].payload.data.config config_block.json > config.json
+jq $MAXBATCHSIZEPATH config.json 
+rm config_reduced.json 
+ls
+rm config.pb 
+rm blocks.pb 
+ls
+jq "$MAXBATCHSIZEPATH = 20" config.json > modified_config.json
+man jq
+configtxlator proto_encode --input config.json --type common.Config --output config.pb
+configtxlator proto_encode --input modified_config.json --type common.Config --output modified_config.pb
+ls
+configtxlator compute_update --channel_id mychannel --original config.pb --updated modified_config.pb --output batchsize_update.pb
+configtxlator proto_decode --input batchsize_update.pb --type common.ConfigUpdate --output batchsize_update.json
+vi batchsize_update.json 
+echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":'$(cat batchsize_update.json)'}}}' | jq . > batchsize_update_in_envelope.json
+vi batchsize_update_in_envelope.json 
+configtxlator --input batchsize_update_in_envelope.json --type common.Envelope --output batchsize_update_in_envelope.pb
+configtxlator proto_encode --input batchsize_update_in_envelope.json --type common.Envelope --output batchsize_update_in_envelope.pb
+vi batchsize_update_in_envelope.pb 
+configtxlator proto_decode --input batchsize_update_in_envelope.pb --type common.Envelope --output batchsize_update_in_envelope_from_pb.json 
+vi batchsize_update_in_envelope_from_pb.json 
+ls
+peer channel --help
+peer channel update --help
+peer channel update -f batchsize_update_in_envelope.pb -o 127.0.0.1:7050 -c mychannel
+history 
+history | vi 
+history | vipe
+history > history.txt

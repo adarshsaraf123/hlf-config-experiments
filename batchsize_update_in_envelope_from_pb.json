@@ -1,0 +1,65 @@
+{
+	"payload": {
+		"data": {
+			"config_update": {
+				"channel_id": "mychannel",
+				"isolated_data": {},
+				"read_set": {
+					"groups": {
+						"Orderer": {
+							"groups": {},
+							"mod_policy": "",
+							"policies": {},
+							"values": {},
+							"version": "0"
+						}
+					},
+					"mod_policy": "",
+					"policies": {},
+					"values": {},
+					"version": "0"
+				},
+				"write_set": {
+					"groups": {
+						"Orderer": {
+							"groups": {},
+							"mod_policy": "",
+							"policies": {},
+							"values": {
+								"BatchSize": {
+									"mod_policy": "Admins",
+									"value": {
+										"absolute_max_bytes": 10485760,
+										"max_message_count": 20,
+										"preferred_max_bytes": 524288
+									},
+									"version": "1"
+								}
+							},
+							"version": "0"
+						}
+					},
+					"mod_policy": "",
+					"policies": {},
+					"values": {},
+					"version": "0"
+				}
+			},
+			"signatures": []
+		},
+		"header": {
+			"channel_header": {
+				"channel_id": "mychannel",
+				"epoch": "0",
+				"extension": null,
+				"timestamp": null,
+				"tls_cert_hash": null,
+				"tx_id": "",
+				"type": 2,
+				"version": 0
+			},
+			"signature_header": null
+		}
+	},
+	"signature": null
+}
